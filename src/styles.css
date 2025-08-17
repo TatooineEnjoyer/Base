@@ -107,11 +107,19 @@ body {
   font-family: inherit;
   cursor: pointer;
   border-radius: 4px;
-  transition: box-shadow .3s;
+  transition: box-shadow .3s, transform .3s;
+  animation: neonPulse 2s infinite;
 }
 
 .auth-wrapper button:hover {
-  box-shadow: 0 0 12px #00ffe5;
+  box-shadow: 0 0 14px #00ffe5, 0 0 30px #00ffe5;
+  transform: translateY(-2px);
+}
+
+@keyframes neonPulse {
+  0%   { box-shadow: 0 0 8px #00ffe5; }
+  50%  { box-shadow: 0 0 16px #00ffe5; }
+  100% { box-shadow: 0 0 8px #00ffe5; }
 }
 
 @keyframes fadein {
