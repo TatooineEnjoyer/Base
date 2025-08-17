@@ -11,17 +11,26 @@ import {
 } from "lucide-react";
 
 import AuthPage from './components/AuthPage';
-import { observeAuthState, logOut } from './firebase';
+import { observeAuthState, logOut, addComment, subscribeToComments } from './firebase';
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [comment, setComment] = useState("");
   const [typedText, setTypedText] = useState("");
   const [activeTab, setActiveTab] = useState(null);
+  const [commentText, setCommentText] = useState("");    // <- новое: ввод
+  const [commentsList, setCommentsList] = useState([]);  // <- новое: список
+
   const audioRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = observeAuthState(setUser);
+    return () => unsubscribe();
+  }, []);
+
+  // подписка на firestore комментарии
+  useEffect(() => {
+    const unsubscribe = subscribeToComments(setCommentsList);
     return () => unsubscribe();
   }, []);
 
@@ -52,13 +61,19 @@ const App = () => {
     }
   };
 
+  const handleSendComment = async () => {
+    if (commentText.trim() !== "") {
+      await addComment(commentText.trim());
+      setCommentText("");
+    }
+  };
+
   const tabs = [
     { label: "JS",      icon: <Braces size={24} />,   comment: "#здесь вы можете ознакомиться с примерами вёрстки и JSX#",  url: "https://react.dev/" },
     { label: "Python",  icon: <Terminal size={24} />, comment: "#здесь вы можете попрактиковаться в решении задач на питон#", url: "https://pythonexamples.org/python-exercises/", withMusic: true },
     { label: "CSS",     icon: <Palette size={24} />,  comment: "#обалдеть какая красота#", url: "https://uiverse.io/" },
     { label: "HTML",    icon: <Layout size={24} />,   comment: "#частные случаи синтаксиса, интересные шаблоны#", url: "https://html5up.net/" },
     { label: "Резюме",  icon: <FileText size={24} />, comment: "#здесь можно ознакомиться с примерами работ#", url: null },
-    // 🔥 новые вкладки:
     { label: "Музыка",  icon: <Music size={24} />,    comment: "#relax & listen#", url: "https://soundcloud.com/" },
     { label: "AI Fun",  icon: <Globe size={24} />,    comment: "#искусственный интеллект — генераторы, игры #", url: "https://openai.com/" }
   ];
@@ -67,7 +82,7 @@ const App = () => {
 
   return (
     <div className="wrapper">
-      <button className="logout-btn" onClick={logOut}>
+      <button className="comment-btn" onClick={logOut}>
         <LogOut size={18} /> Logout
       </button>
 
@@ -95,6 +110,27 @@ const App = () => {
       </div>
 
       {typedText && <div className="comment">{typedText}</div>}
+
+      {/* ---- комментарии ---- */}
+      <div style={{ marginTop: "40px" }}>
+        <textarea
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          placeholder="Оставить комментарий..."
+          rows={4}
+          style={{ width: "100%", padding: "10px" }}
+        />
+        <button onClick={handleSendComment} style={{ marginTop: "10px" }}>
+          Отправить
+        </button>
+
+        {/* отрисуем список комментариев */}
+        <ul style={{ marginTop: "20px" }}>
+          {commentsList.map((c) => (
+            <li key={c.id}>{c.text}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -56,3 +56,25 @@ export const observeAuthState = (callback) => {
     callback(user ? user : null);
   });
 };
+
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
+
+// добавить комментарий
+export const addComment = async (text) => {
+  try {
+    await addDoc(collection(db, "comments"), {
+      text,
+      createdAt: Date.now()
+    });
+  } catch (e) {
+    console.error("Error adding comment: ", e);
+  }
+};
+
+// подписка на изменения
+export const subscribeToComments = (callback) => {
+  return onSnapshot(collection(db, "comments"), (snapshot) => {
+    const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    callback(data);
+  });
+};
