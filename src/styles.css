@@ -1,45 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  font-family: "Press Start 2P", cursive;
+  background: #141414;
+  color: #eee;
+  margin: 0;
+}
+
+/* ----- Вкладки ----- */
+
 .wrapper {
-  width: 550px;
-  margin: 40px auto;
+  width: 700px;
+  margin: 60px auto;
 }
 
 .tabs {
   display: flex;
-  gap: 10px;
+  gap: 14px;
 }
 
 .tab {
-  padding: 12px 20px;
-  border: 1px solid #444;
-  border-radius: 6px;
-  background: #fafafa;
+  padding: 15px 25px;
+  border-radius: 8px;
+  background: #1a1a1a;
+  border: 1px solid #00ffe5;
+  color: #00ffe5;
   display: flex;
   align-items: center;
   cursor: pointer;
   user-select: none;
-  transition: box-shadow 0.3s;
+  transition: all 0.3s;
 }
 
 .tab:hover {
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 15px #00ffe5, 0 0 30px #00ffe5;
+  transform: translateY(-2px);
 }
 
 .tab.active {
-  background-color: #eeeeee;
-  font-weight: 600;
-  border-bottom: 3px solid #222;
+  background: #00ffe5;
+  color: #141414;
+  font-weight: 700;
 }
+
+/* ----- комментарий ----- */
 
 .comment {
   margin-top: 25px;
   padding: 15px;
-  border: 1px dashed #222;
+  border: 1px dashed #00ffe5;
   font-style: italic;
-  opacity: 0;
   animation: fadein 0.4s forwards;
+  opacity: 0;
+}
+
+/* ----- кнопка logout ----- */
+
+.logout-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #00ffe5;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+
+.logout-btn:hover {
+  box-shadow: 0 0 15px #00ffe5;
+}
+
+/* ----- Auth Page ----- */
+
+.auth-wrapper {
+  width: 400px;
+  margin: 80px auto;
+  text-align: center;
+  background: #1a1a1a;
+  border: 1px solid #00ffe5;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 0 15px #00ffe5;
+}
+
+.auth-wrapper input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #00ffe5;
+  background: #000;
+  color: #00ffe5;
+  font-family: inherit;
+}
+
+.auth-wrapper button {
+  width: 48%;
+  margin: 5px 1%;
+  padding: 10px;
+  border: none;
+  background: #00ffe5;
+  color: #000;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: box-shadow .3s;
+}
+
+.auth-wrapper button:hover {
+  box-shadow: 0 0 12px #00ffe5;
 }
 
 @keyframes fadein {
   from { opacity: 0; }
-  to   { opacity: 1; }
+  to { opacity: 1; }
 }

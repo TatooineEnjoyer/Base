@@ -4,15 +4,26 @@ import {
   Terminal,
   Palette,
   Layout,
-  FileText
+  FileText,
+  Music,
+  Globe,
+  LogOut
 } from "lucide-react";
+
 import AuthPage from './components/AuthPage';
+import { observeAuthState, logOut } from './firebase';
 
 const App = () => {
+  const [user, setUser] = useState(null);
   const [comment, setComment] = useState("");
   const [typedText, setTypedText] = useState("");
   const [activeTab, setActiveTab] = useState(null);
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    const unsubscribe = observeAuthState(setUser);
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (comment) {
@@ -42,41 +53,24 @@ const App = () => {
   };
 
   const tabs = [
-    {
-      label: "JS",
-      icon: <Braces size={18} />,
-      comment: "#здесь вы можете ознакомиться с примерами вёрстки и JSX#",
-      url: "https://react.dev/"
-    },
-    {
-      label: "Python",
-      icon: <Terminal size={18} />,
-      comment: "#здесь вы можете попрактиковаться в решении задач на питон#",
-      url: "https://pythonexamples.org/python-exercises/",
-      withMusic: true
-    },
-    {
-      label: "CSS",
-      icon: <Palette size={18} />,
-      comment: "#обалдеть какая красота#",
-      url: "https://uiverse.io/"
-    },
-    {
-      label: "HTML",
-      icon: <Layout size={18} />,
-      comment: "#частные случаи синтаксиса, интересные шаблоны#",
-      url: "https://html5up.net/"
-    },
-    {
-      label: "Резюме",
-      icon: <FileText size={18} />,
-      comment: "#здесь можно ознакомиться с примерами работ#",
-      url: null
-    }
+    { label: "JS",      icon: <Braces size={24} />,   comment: "#здесь вы можете ознакомиться с примерами вёрстки и JSX#",  url: "https://react.dev/" },
+    { label: "Python",  icon: <Terminal size={24} />, comment: "#здесь вы можете попрактиковаться в решении задач на питон#", url: "https://pythonexamples.org/python-exercises/", withMusic: true },
+    { label: "CSS",     icon: <Palette size={24} />,  comment: "#обалдеть какая красота#", url: "https://uiverse.io/" },
+    { label: "HTML",    icon: <Layout size={24} />,   comment: "#частные случаи синтаксиса, интересные шаблоны#", url: "https://html5up.net/" },
+    { label: "Резюме",  icon: <FileText size={24} />, comment: "#здесь можно ознакомиться с примерами работ#", url: null },
+    // 🔥 новые вкладки:
+    { label: "Музыка",  icon: <Music size={24} />,    comment: "#relax & listen#", url: "https://soundcloud.com/" },
+    { label: "AI Fun",  icon: <Globe size={24} />,    comment: "#искусственный интеллект — генераторы, игры #", url: "https://openai.com/" }
   ];
+
+  if (!user) return <AuthPage />;
 
   return (
     <div className="wrapper">
+      <button className="logout-btn" onClick={logOut}>
+        <LogOut size={18} /> Logout
+      </button>
+
       <div className="tabs">
         {tabs.map((tab) => (
           <div

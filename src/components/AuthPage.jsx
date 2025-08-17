@@ -6,22 +6,27 @@ const AuthPage = () => {
   const [password, setPassword] = useState('');
 
   return (
-    <div>
+    <div className="auth-wrapper">
       <h2>Авторизация</h2>
+
       <input
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
+
       <input
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={() => logIn(email, password)}>Log in</button>
-      <button onClick={() => signUp(email, password)}>Sign up</button>
+
+      <div>
+        <button onClick={() => logIn(email, password)}>Log in</button>
+        <button onClick={() => signUp(email, password)}>Sign up</button>
+      </div>
     </div>
   );
 };

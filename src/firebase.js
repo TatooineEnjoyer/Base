@@ -1,7 +1,5 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -16,55 +14,45 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+export const auth = getAuth(app);
 
-// Функция для регистрации
-export const signUp = async (email: string, password: string) => {
+// Регистрация
+export const signUp = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     console.log("User registered:", userCredential.user);
     return userCredential.user;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error signing up:", error.message);
     throw new Error(error.message);
   }
 };
 
-import { signInWithEmailAndPassword } from "firebase/auth";
-
-// Функция для входа
-export const logIn = async (email: string, password: string) => {
+// Вход
+export const logIn = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     console.log("User logged in:", userCredential.user);
     return userCredential.user;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error logging in:", error.message);
     throw new Error(error.message);
   }
 };
 
-import { signOut } from "firebase/auth";
-
-// Функция для выхода
+// Выход
 export const logOut = async () => {
   try {
     await signOut(auth);
     console.log("User logged out");
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error logging out:", error.message);
   }
 };
 
-import { onAuthStateChanged } from "firebase/auth";
-
-export const observeAuthState = (callback: (user: any) => void) => {
+// Отслеживание состояния
+export const observeAuthState = (callback) => {
   return onAuthStateChanged(auth, (user) => {
-    if (user) {
-      callback(user);
-    } else {
-      callback(null);
-    }
+    callback(user ? user : null);
   });
 };
