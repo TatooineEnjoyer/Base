@@ -6,6 +6,7 @@ import {
   Layout,
   FileText
 } from "lucide-react";
+import AuthPage from './components/AuthPage';
 
 const App = () => {
   const [comment, setComment] = useState("");
